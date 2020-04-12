@@ -23,9 +23,9 @@ batch_size = 32
 learing_rate = 2e-5
 
 # bert配置
-config_path = '/root/kg/bert/chinese_roberta_wwm_ext_L-12_H-768_A-12/bert_config.json'
-checkpoint_path = '/root/kg/bert/chinese_roberta_wwm_ext_L-12_H-768_A-12/bert_model.ckpt'
-dict_path = '/root/kg/bert/chinese_roberta_wwm_ext_L-12_H-768_A-12/vocab.txt'
+config_path = '/home/aistudio/model/roberta_zh_l12/bert_config.json'
+checkpoint_path = '/home/aistudio/model/roberta_zh_l12/bert_model.ckpt'
+dict_path = '/home/aistudio/model/roberta_zh_l12/vocab.txt'
 
 
 def load_data(filename):
@@ -41,7 +41,7 @@ def load_data(filename):
 
 # 读取数据
 train_data = load_data(
-    '/root/baidu/datasets/rc/dureader_robust-data/train.json'
+    '/home/aistudio/data/data29957/dureader_robust-data/train.json'
 )
 
 # 建立分词器
@@ -181,7 +181,7 @@ def evaluate(filename):
     predict_to_file(filename, filename + '.pred.json')
     metrics = json.loads(
         os.popen(
-            'python /root/baidu/datasets/rc/dureader_robust-data/evaluate.py %s %s'
+            'python /home/aistudio/data/data29957/dureader_robust-data/evaluate.py %s %s'
             % (filename, filename + '.pred.json')
         ).read().strip()
     )
@@ -196,7 +196,7 @@ class Evaluator(keras.callbacks.Callback):
 
     def on_epoch_end(self, epoch, logs=None):
         metrics = evaluate(
-            '/root/baidu/datasets/rc/dureader_robust-data/dev.json'
+            '/home/aistudio/data/data29957/dureader_robust-data/dev.json'
         )
         if metrics['F1'] >= self.best_val_f1:
             self.best_val_f1 = metrics['F1']
@@ -220,4 +220,4 @@ if __name__ == '__main__':
 else:
 
     model.load_weights('best_model.weights')
-    # predict_to_file('/root/baidu/datasets/rc/dureader_robust-test1/test1.json', 'rc_pred.json')
+    # predict_to_file('/home/aistudio/data/data29957/dureader_robust-test1/test1.json', 'rc_pred.json')
